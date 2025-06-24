@@ -15,8 +15,8 @@ function App() {
         <h1>Welcome to the Clinic System</h1>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/DoctorPage" element={<DoctorPage />} />
-          <Route path="/ClinicsPage" element={<ClinicsPage />} />
+          <Route path="/Doctors" element={<DoctorPage />} />
+          <Route path="/Clinics" element={<ClinicsPage />} />
         </Routes>
       </div>
     </Router>

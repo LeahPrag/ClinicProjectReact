@@ -9,10 +9,10 @@ const HomePage = () => {
     <div style={styles.container}>
       <h2 style={styles.title}>ברוכים הבאים למערכת המרפאה</h2>
       <div style={styles.buttonGroup}>
-        <button style={styles.button} onClick={() => navigate('/DoctorPage')}>
+        <button style={styles.button} onClick={() => navigate('/Doctors')}>
           👨‍⚕️ רופאים
         </button>
-        <button style={styles.button} onClick={() => navigate('/ClinicsPage')}>
+        <button style={styles.button} onClick={() => navigate('/Clinics')}>
           👤 פציינטים
         </button>
       </div>
