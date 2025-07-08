@@ -1,24 +1,52 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
+// HomePage.jsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useUser } from '../contextUser/UserContext';
 
 const HomePage = () => {
+  const [idNumber, setIdNumber] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setUserId } = useUser(); // Save ID in context
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5015/api/LogIn/GetUserType?id=${idNumber}`);
+      const userType = response.data;
+      console.log('User Type:', userType); // Debugging log
+
+      setUserId(idNumber); // Save the ID to context
+
+     if (userType === 'Doctor') navigate('/Doctors');
+     else if (userType === 'client') navigate('/Clinics');
+     else if (userType === 'Secretary') navigate('/Secretary');
+     else setError('Unrecognized user type');
+    } catch (err) {
+      setError('ID not found or server error');
+    }
+  };
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>ברוכים הבאים למערכת המרפאה</h2>
-      <div style={styles.buttonGroup}>
-        <button style={styles.button} onClick={() => navigate('/Doctors')}>
-          👨‍⚕️ רופאים
-        </button>
-        <button style={styles.button} onClick={() => navigate('/Clinics')}>
-          👤 פציינטים
-        </button>
-      </div>
+      <h2 style={styles.title}>Login to the Clinic System</h2>
+      <input
+        type="text"
+        placeholder="Enter ID number"
+        value={idNumber}
+        onChange={(e) => setIdNumber(e.target.value)}
+        style={styles.input}
+      />
+      <button style={styles.button} onClick={handleLogin}>
+        Login
+      </button>
+      {error && <p style={styles.error}>{error}</p>}
     </div>
   );
 };
+
+export default HomePage;
 
 const styles = {
   container: {
@@ -27,21 +55,27 @@ const styles = {
     fontFamily: 'Arial',
   },
   title: {
-    marginBottom: '2rem',
+    marginBottom: '1rem',
   },
-  buttonGroup: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '2rem',
+  input: {
+    padding: '0.5rem',
+    fontSize: '1rem',
+    marginBottom: '1rem',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    width: '200px',
   },
   button: {
-    padding: '1rem 2rem',
-    fontSize: '1.2rem',
+    padding: '0.75rem 1.5rem',
+    fontSize: '1rem',
     cursor: 'pointer',
     borderRadius: '8px',
-    border: '1px solid #ccc',
-    backgroundColor: '#f2f2f2',
+    border: 'none',
+    backgroundColor: '#4CAF50',
+    color: 'white',
+  },
+  error: {
+    color: 'red',
+    marginTop: '1rem',
   },
 };
-
-export default HomePage;
