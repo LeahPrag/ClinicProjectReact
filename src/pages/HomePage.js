@@ -5,6 +5,7 @@ import axios from 'axios';
 // import { useUser } from './UserContext';
 import { useUser } from '../contextUser/UserContext';
 
+
 const HomePage = () => {
   const [id, setId] = useState('');
   const [error, setError] = useState('');
@@ -13,13 +14,16 @@ const HomePage = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.get(`http://localhost:5015/GetUserType?id=${id}`);
+
+      
+      const response = await axios.get(`http://localhost:5015/api/LogIn/GetUserType?id=${id}`);
+      console.log("API Response:", response);
       const userType = response.data;
 
       setUserId(id); // שמירת התעודת זהות בקונטקסט
 
       if (userType === 'Doctor') navigate('/DoctorPage');
-      else if (userType === 'Patient') navigate('/ClinicsPage');
+      else if (userType === 'Client') navigate('/ClinicsPage');
       else if (userType === 'Secretary') navigate('/SecretaryPage');
       else setError('סוג משתמש לא מזוהה');
     } catch (err) {
@@ -28,6 +32,7 @@ const HomePage = () => {
   };
 
   return (
+
     <div style={styles.container}>
       <h2 style={styles.title}>כניסה למערכת המרפאה</h2>
       <input
@@ -42,6 +47,7 @@ const HomePage = () => {
       </button>
       {error && <p style={styles.error}>{error}</p>}
     </div>
+
   );
 };
 export default HomePage;
