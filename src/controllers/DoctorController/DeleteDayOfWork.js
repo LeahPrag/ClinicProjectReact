@@ -14,7 +14,7 @@ function DeleteDayOfWork() {
         setResult(null);
 
         try {
-            const response = await axios.delete('http://localhost:5015/deleteADayOfWork', {
+            const response = await axios.delete('http://localhost:5015/api/Doctor/deleteADayOfWork', {
                 params: {
                     firstName,
                     lastName,

@@ -15,7 +15,7 @@ function DoctorQueuesForToday() {
         setQueues([]);
 
         try {
-            const res = await axios.get('http://localhost:5015/ ', {
+            const res = await axios.get('http://localhost:5015/api/Doctor/DoctorQueuesForToday ', {
                 params: { firstName, lastName }
             });
             setQueues(res.data);
