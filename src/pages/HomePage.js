@@ -20,7 +20,7 @@ const HomePage = () => {
       setUserId(idNumber); // Save the ID to context
 
      if (userType === 'Doctor') navigate('/Doctors');
-     else if (userType === 'client') navigate('/Clinics');
+     else if (userType === 'Client') navigate('/Clinics');
      else if (userType === 'Secretary') navigate('/Secretary');
      else setError('Unrecognized user type');
     } catch (err) {
