@@ -15,7 +15,7 @@ function NumOfClientsForToday() {
         setNum(null);
 
         try {
-            const res = await axios.get('http://localhost:5015/GetNumOfClientForToday', {
+            const res = await axios.get('http://localhost:5015/api/Doctor/numOfClientForToday', {
                 params: { firstName, lastName }
             });
             setNum(res.data);

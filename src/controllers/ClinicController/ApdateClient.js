@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AddClient = () => {
+const UpdateClient = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -23,35 +23,27 @@ const AddClient = () => {
 
   const handleSubmit = async () => {
     try {
-      const clientToSend = {
+      const clientToUpdate = {
         ...formData,
         clinicQueues: [],
       };
 
-      const response = await axios.post('http://localhost:5015/api/Clinic/clients', clientToSend);
+      await axios.put('http://localhost:5015/api/Clinic/clients', clientToUpdate);
 
-      setSuccess('Customer added successfully!');
+      setSuccess('The client has been successfully updated!');
       setError('');
-      setFormData({
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-        address: '',
-        idNumber: '',
-      });
     } catch (err) {
-      setSuccess('');
-      setError('An error occurred while adding the customer.');
       console.error(err);
+      setError('An error occurred while updating the client');
+      setSuccess('');
     }
   };
 
   return (
     <div style={{ padding: '2rem', maxWidth: '500px', margin: '0 auto' }}>
-      <h3>Adding a new customer</h3>
+      <h3>Customer update by ID</h3>
 
-      {['firstName', 'lastName', 'phone', 'email', 'address', 'idNumber'].map((field) => (
+      {['idNumber', 'firstName', 'lastName', 'phone', 'email', 'address'].map((field) => (
         <div key={field} style={{ marginBottom: '1rem' }}>
           <label>
             {field}:
@@ -66,7 +58,7 @@ const AddClient = () => {
         </div>
       ))}
 
-      <button onClick={handleSubmit}>Add customer</button>
+      <button onClick={handleSubmit}>🔄 עדכן לקוח</button>
 
       {success && <p style={{ color: 'green' }}>{success}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -74,4 +66,4 @@ const AddClient = () => {
   );
 };
 
-export default AddClient;
+export default UpdateClient;

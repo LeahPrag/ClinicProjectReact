@@ -5,23 +5,27 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useUser } from '../contextUser/UserContext';
 
+
 const HomePage = () => {
-  const [idNumber, setIdNumber] = useState('');
+  const [id, setIdNumber] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { setUserId } = useUser(); // Save ID in context
 
   const handleLogin = async () => {
     try {
-      const response = await axios.get(`http://localhost:5015/api/LogIn/GetUserType?id=${idNumber}`);
+
+      
+      const response = await axios.get(`http://localhost:5015/api/LogIn/GetUserType?id=${id}`);
+      console.log("API Response:", response);
       const userType = response.data;
       console.log('User Type:', userType); // Debugging log
 
-      setUserId(idNumber); // Save the ID to context
+      setUserId(id); // Save the ID to context
 
-     if (userType === 'Doctor') navigate('/Doctors');
-     else if (userType === 'Client') navigate('/Clinics');
-     else if (userType === 'Secretary') navigate('/Secretary');
+     if (userType === 'Doctor') navigate('/DoctorPage');
+     else if (userType === 'Client') navigate('/ClinicsPage');
+     else if (userType === 'Secretary') navigate('/SecretaryPage');
      else setError('Unrecognized user type');
     } catch (err) {
       setError('ID not found or server error');
@@ -29,12 +33,13 @@ const HomePage = () => {
   };
 
   return (
+
     <div style={styles.container}>
       <h2 style={styles.title}>Login to the Clinic System</h2>
       <input
         type="text"
         placeholder="Enter ID number"
-        value={idNumber}
+        value={id}
         onChange={(e) => setIdNumber(e.target.value)}
         style={styles.input}
       />
@@ -43,6 +48,7 @@ const HomePage = () => {
       </button>
       {error && <p style={styles.error}>{error}</p>}
     </div>
+
   );
 };
 

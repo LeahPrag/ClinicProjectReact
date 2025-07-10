@@ -3,19 +3,22 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import DoctorPage from './pages/DoctorPage';
 import ClinicsPage from './pages/ClinicsPage';
-import SecretaryPage from './pages/SecretaryPage';
-import { UserProvider } from './contextUser/UserContext'; // שים לב לנתיב
+import { UserProvider } from './contextUser/UserContext';
+import RegisterPage from './components/RegisterPage';
+import Layout from './components/Layout';
 
 function App() {
   return (
     <UserProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/Doctors" element={<DoctorPage />} />
-          <Route path="/Clinics" element={<ClinicsPage />} />
-          <Route path="/Secretary" element={<SecretaryPage />} />
-          {/* Add more routes as needed */}
+         
+          <Route path="/register" element={<RegisterPage />} />
+
+          {/* ✅ הדפים הרגילים כן עטופים */}
+          <Route path="/" element={<Layout><HomePage /></Layout>} />
+          <Route path="/DoctorPage" element={<Layout><DoctorPage /></Layout>} />
+          <Route path="/ClinicsPage" element={<Layout><ClinicsPage /></Layout>} />
         </Routes>
       </Router>
     </UserProvider>

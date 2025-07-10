@@ -5,10 +5,10 @@ function AvailableQueuesToday() {
   const [queues, setQueues] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5015/AvailableQueuesForToday')
+    axios.get('http://localhost:5015/api/Doctor/AvailableQueuesForToday')
       .then(res => {
         console.log('Available queues:', res.data);
-        setQueues(res.data);
+        setQueues(res.data.$values);
       })
       .catch(err => console.error('Error fetching queues:', err));
   }, []);

@@ -8,7 +8,7 @@ const GetClientById = () => {
 
     const handleGetClient = async () => {
         try {
-            const response = await axios.get(`http://localhost:5015/api/Clinic/getClientById/${idNumber}`);
+            const response = await axios.get(`http://localhost:5015/api/Clinic/clients/${idNumber}`);
             setClient(response.data);
             setError('');
         } catch (err) {
@@ -31,12 +31,24 @@ const GetClientById = () => {
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
             {client && (
-                <div style={{ marginTop: '1rem', border: '1px solid #ccc', padding: '1rem' }}>
-                    <p><strong>ID:</strong> {client.idNumber}</p>
-                    <p><strong>Name:</strong> {client.firstName} {client.lastName}</p>
-                    <p><strong>Queues:</strong> {client.clinicQueues}</p>
-                </div>
-            )}
+  <div style={{ marginTop: '1rem', border: '1px solid #ccc', padding: '1rem' }}>
+    <p><strong>ID:</strong> {client.idNumber}</p>
+    <p><strong>Name:</strong> {client.firstName} {client.lastName}</p>
+    <p><strong>Queues:</strong></p>
+    {Array.isArray(client.clinicQueues?.$values) && client.clinicQueues.$values.length > 0 ? (
+      <ul>
+        {client.clinicQueues.$values.map((q, i) => (
+          <li key={i}>
+            מזהה תור: {q.queueId} | תאריך: {q.appointmentDate}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>אין תורים</p>
+    )}
+  </div>
+)}
+
         </div>
     );
 };
