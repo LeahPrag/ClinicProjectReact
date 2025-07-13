@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import DoctorPage from './pages/DoctorPage';
+import DoctorPage from './components/DoctorPage';
 import ClinicsPage from './pages/ClinicsPage';
 import { UserProvider } from './contextUser/UserContext';
 import RegisterPage from './components/RegisterPage';
@@ -12,12 +12,10 @@ function App() {
     <UserProvider>
       <Router>
         <Routes>
-         
           <Route path="/register" element={<RegisterPage />} />
-
-          {/* ✅ הדפים הרגילים כן עטופים */}
+          {/* ✅ Regular pages are wrapped */}
           <Route path="/" element={<Layout><HomePage /></Layout>} />
-          <Route path="/DoctorPage" element={<Layout><DoctorPage /></Layout>} />
+          <Route path="/DoctorPage" element={<DoctorPage />} />
           <Route path="/ClinicsPage" element={<Layout><ClinicsPage /></Layout>} />
         </Routes>
       </Router>

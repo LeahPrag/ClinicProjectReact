@@ -7,18 +7,22 @@ function AvailableQueuesToday() {
   useEffect(() => {
     axios.get('http://localhost:5015/api/Doctor/AvailableQueuesForToday')
       .then(res => {
-        console.log('Available queues:', res.data);
-        setQueues(res.data.$values);
+        const data = res.data?.$values ?? res.data ?? [];
+        setQueues(Array.isArray(data) ? data : []);
       })
-      .catch(err => console.error('Error fetching queues:', err));
+      .catch(err => {
+        console.error('Error fetching queues:', err);
+        setQueues([]); 
+      });
   }, []);
+  
 
   return (
     <div style={{ padding: '20px' }}>
       <h2>Available Queues For Today</h2>
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {queues.length === 0 && <li>No available queues for today.</li>}
-        {queues.map((queue, index) => (
+      {(queues?.length ?? 0) === 0 && <li>No available queues for today.</li>}
+      {Array.isArray(queues) && queues.map((queue, index) => (
           <li
             key={index}
             style={{
