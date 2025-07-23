@@ -7,24 +7,35 @@ const HomePage = () => {
   const [id, setId] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { setUserId, setUserName } = useUser();
+  const { setUserId } = useUser();
 
   const handleLogin = async () => {
     try {
+      setError('');
+      console.log('Trying to login with ID:', id);
+
+      // 1. שולח את ה-ID לקבלת סוג משתמש
       const response = await axios.get(`http://localhost:5015/api/LogIn/GetUserType?id=${id}`);
       const userType = response.data;
+      console.log('User type from server:', userType);
 
+      // 2. שומר את תעודת הזהות ב־context
       setUserId(id);
 
-      const nameRes = await axios.get(`http://localhost:5015/api/Doctor/GetDoctorName?id=${id}`);
-      const name = nameRes.data;
-      setUserName(name);
-        if (userType === 'Doctor') navigate('/DoctorPage');
-        else if (userType === 'Client') navigate('/ClinicsPage');
-        else if (userType === 'Secretary') navigate('/SecretaryPage');
-        else setError('Unrecognized user type');
+      // 3. מפנה למסך המתאים לפי סוג משתמש
+      if (userType === 'Doctor') {
+        navigate('/DoctorPage');
+      } else if (userType === 'Client') {
+        navigate('/ClinicsPage');
+      } else if (userType === 'Secretary') {
+        navigate('/SecretaryPage');
+      } else {
+        setError('סוג משתמש לא מזוהה');
+      }
+
     } catch (err) {
-      setError('ID not found or server error');
+      console.error('Login error:', err);
+      setError('תעודת זהות לא קיימת או שגיאת שרת');
     }
   };
 
@@ -49,6 +60,13 @@ const HomePage = () => {
 export default HomePage;
 
 const styles = {
+  container: {
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: '#f0f4f8',
+  },
   card: {
     padding: '2rem',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',

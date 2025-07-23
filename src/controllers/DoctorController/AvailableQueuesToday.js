@@ -1,47 +1,58 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function AvailableQueuesToday() {
+const AvailableQueues = () => {
   const [queues, setQueues] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5015/api/Doctor/AvailableQueuesForToday')
-      .then(res => {
-        const data = res.data?.$values ?? res.data ?? [];
-        setQueues(Array.isArray(data) ? data : []);
-      })
-      .catch(err => {
+    const fetchQueues = async () => {
+      try {
+        const response = await axios.get('http://localhost:5015/api/Doctor/AvailableQueuesForToday');
+        console.log('Server response:', response.data);
+        // תיקון: לגשת ל-$values
+        setQueues(response.data.$values || []);
+      } catch (err) {
         console.error('Error fetching queues:', err);
-        setQueues([]); 
-      });
+        setError('שגיאה בטעינת התורים מהשרת');
+      }
+    };
+
+    fetchQueues();
   }, []);
-  
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Available Queues For Today</h2>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-      {(queues?.length ?? 0) === 0 && <li>No available queues for today.</li>}
-      {Array.isArray(queues) && queues.map((queue, index) => (
-          <li
-            key={index}
-            style={{
-              border: '1px solid #4caf50',
-              borderRadius: '8px',
-              margin: '10px 0',
-              padding: '15px',
-              background: '#f9fff9',
-              boxShadow: '0 2px 8px #e0ffe0'
-            }}
-          >
-            <p><strong>Doctor:</strong> {queue.doctorName}</p>
-            <p><strong>Time:</strong> {queue.time}</p>
-            <p><strong>Room:</strong> {queue.roomNumber}</p>
-          </li>
-        ))}
-      </ul>
+    <div style={{ padding: '1rem' }}>
+      <h2>תורים זמינים להיום</h2>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {queues.length === 0 ? (
+        <p>אין תורים זמינים להצגה.</p>
+      ) : (
+        <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
+          <thead>
+            <tr>
+              <th>מספר תור</th>
+              <th>שעה</th>
+              <th>מספר רופא</th>
+            </tr>
+          </thead>
+          <tbody>
+            {queues.map((queue) => (
+              <tr key={queue.queueId}>
+                <td>{queue.queueId}</td>
+                <td>{new Date(queue.appointmentDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                <td>{queue.doctorId}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
-}
+};
 
-export default AvailableQueuesToday;
+export default AvailableQueues;
+
